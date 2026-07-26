@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de facilitador/a · Kusisiña</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-kusi">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Kusi<span>siña</span></a>
+    <div class="d-flex align-items-center gap-2">
+      <span class="chip-nivel d-none d-sm-inline-flex"><i class="bi bi-person-workspace"></i> Facilitador/a</span>
+      <button class="btn-idioma" data-accion="alternar-idioma" aria-label="Cambiar idioma / Aru tukuyaña" title="Español / Aymara"><span data-i18n-toggle-label>AY</span></button>
+      <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3"><i class="bi bi-box-arrow-left"></i></a>
+    </div>
+  </div>
+</nav>
+<div class="telar telar-fina" aria-hidden="true"></div>
+
+<!-- Compuerta de acceso -->
+<div id="compuertaAcceso" class="container py-5 d-flex align-items-center justify-content-center" style="min-height:70vh;">
+  <div class="card-kusi p-4 p-md-5" style="max-width:420px;width:100%;">
+    <div class="text-center mb-3">
+      <i class="bi bi-shield-lock text-terracota" style="font-size:2.2rem;"></i>
+      <h1 class="fs-4 text-noche mt-2" data-i18n="fac_accesoTitulo">Acceso de facilitador/a</h1>
+      <p class="text-muted small" data-i18n="fac_accesoTexto">Ingresa el código de acceso que te dio la organización.</p>
+    </div>
+    <form id="formAcceso">
+      <input type="password" class="form-control mb-3 text-center font-mono" id="pinAcceso" placeholder="••••••••" autocomplete="off">
+      <button type="submit" class="btn-kusi-primario w-100" data-i18n="fac_accesoBoton">Entrar al panel</button>
+    </form>
+    <p class="text-center small text-muted mt-3 mb-0">
+      Código de demostración: <code>KUSI-FACILITA</code>
+    </p>
+  </div>
+</div>
+
+<!-- Panel (oculto hasta validar acceso) -->
+<div id="panelFacilitador" class="container py-4 d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+    <div>
+      <h1 class="fs-3 text-noche mb-0" data-i18n="fac_titulo">Panel de facilitador/a comunitario</h1>
+      <p class="text-muted mb-0" data-i18n="fac_subtitulo">Vista conjunta de las familias registradas en este dispositivo.</p>
+    </div>
+    <button id="btnExportar" class="btn-kusi-verde btn-sm"><i class="bi bi-download me-1"></i><span data-i18n="fac_exportar">Exportar CSV</span></button>
+  </div>
+
+  <div class="alert d-flex align-items-start gap-2" style="background:var(--crema-2); border:none; border-radius:14px;">
+    <i class="bi bi-info-circle text-noche fs-5"></i>
+    <span class="small text-noche" data-i18n="fac_notaArquitectura">Este panel muestra las familias creadas en este mismo dispositivo (ideal para talleres presenciales). Para ver familias de varios dispositivos a la vez se necesitaría un servidor central.</span>
+  </div>
+
+  <!-- KPIs -->
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-lg-3">
+      <div class="card-kusi p-3 text-center">
+        <i class="bi bi-people text-noche fs-3"></i>
+        <div class="fs-3 fw-bold font-mono text-noche" id="kpiFamilias">0</div>
+        <div class="small text-muted" data-i18n="fac_familias">Familias registradas</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card-kusi p-3 text-center">
+        <i class="bi bi-stars text-ocre fs-3"></i>
+        <div class="fs-3 fw-bold font-mono text-noche" id="kpiPuntos">0</div>
+        <div class="small text-muted" data-i18n="fac_puntosProm">Puntos promedio</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card-kusi p-3 text-center">
+        <i class="bi bi-joystick text-verde fs-3"></i>
+        <div class="fs-3 fw-bold font-mono text-noche" id="kpiActividades">0</div>
+        <div class="small text-muted" data-i18n="fac_actividades">Actividades jugadas</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card-kusi p-3 text-center">
+        <i class="bi bi-exclamation-triangle text-terracota fs-3"></i>
+        <div class="fs-3 fw-bold font-mono text-noche" id="kpiAtencion">0</div>
+        <div class="small text-muted" data-i18n="fac_seguimiento">Necesitan seguimiento</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-lg-5">
+      <div class="card-kusi p-4">
+        <h3 class="fs-6 text-noche mb-3">Familias por nivel</h3>
+        <canvas id="graficoNiveles" height="200"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-7">
+      <div class="card-kusi p-4">
+        <h3 class="fs-6 text-noche mb-3">Actividades más jugadas</h3>
+        <canvas id="graficoActividades" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de familias -->
+  <div class="card-kusi p-4">
+    <div class="row g-2 mb-3">
+      <div class="col-md-5">
+        <input type="text" class="form-control" id="buscarFamilia" data-i18n-placeholder="fac_buscar" placeholder="Buscar familia...">
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" id="filtroMunicipio">
+          <option value="todos" data-i18n="fac_municipio">Municipio</option>
+          <option value="La Paz">La Paz</option>
+          <option value="El Alto">El Alto</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" id="filtroEstado">
+          <option value="todos" data-i18n="fac_estadoTodos">Todos los estados</option>
+          <option value="activa" data-i18n="fac_estadoActiva">Activa</option>
+          <option value="atencion" data-i18n="fac_estadoAtencion">Necesita seguimiento</option>
+          <option value="nueva" data-i18n="fac_estadoNueva">Recién registrada</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr class="text-muted small text-uppercase font-mono">
+            <th data-i18n="fac_colFamilia">Familia</th>
+            <th data-i18n="fac_colNivel">Nivel</th>
+            <th data-i18n="fac_colPuntos">Puntos</th>
+            <th data-i18n="fac_colUltima">Última actividad</th>
+            <th data-i18n="fac_colEstado">Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tablaFamilias"></tbody>
+      </table>
+    </div>
+    <p id="mensajeSinFamilias" class="text-muted small text-center py-4 d-none" data-i18n="fac_sinFamilias">Todavía no hay familias registradas en este dispositivo.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/db.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/main.js"></script>
+<script src="js/facilitador.js"></script>
+</body>
+</html>

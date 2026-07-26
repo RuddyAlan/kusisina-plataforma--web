@@ -1,0 +1,462 @@
+/* =========================================================================
+   KUSISIÑA — Plataforma de Crianza Positiva y Co-Playing (La Paz / El Alto)
+   Sistema de diseño
+   ------------------------------------------------------------------------
+   Paleta (inspirada en el aguayo andino, el atardecer del altiplano y la
+   tierra de adobe — NO se usan colores de la wiphala para evitar cualquier
+   apropiación de símbolos patrios):
+     --noche      #16213E  cielo nocturno del altiplano (fondo oscuro / navbar)
+     --terracota  #BF4E30  adobe, tejido, calidez
+     --ocre       #E8A33D  sol, trigo, quinua
+     --verde-valle#3D7A5C  cultivo, coca, esperanza
+     --magenta    #A93F65  hilo de aguayo, alegría
+     --crema      #F7F1E3  lana cruda / papel
+     --tinta      #241C15  texto
+   Tipografía:
+     Display  -> "Fraunces"      (serif cálida, con carácter, uso mesurado)
+     Cuerpo   -> "Work Sans"     (humanista, legible en ES y AY)
+     Utilidad -> "JetBrains Mono"(puntajes, niveles, datos)
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root{
+  --noche:#16213E;
+  --noche-2:#1F2E52;
+  --terracota:#BF4E30;
+  --terracota-2:#9C3D24;
+  --ocre:#E8A33D;
+  --verde-valle:#3D7A5C;
+  --verde-valle-2:#2E5E46;
+  --magenta:#A93F65;
+  --crema:#F7F1E3;
+  --crema-2:#EFE6D0;
+  --tinta:#241C15;
+
+  --font-display:'Fraunces', 'Georgia', serif;
+  --font-body:'Work Sans', system-ui, sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+
+  --radius-lg:22px;
+  --radius-md:14px;
+  --radius-sm:8px;
+
+  --shadow-soft:0 10px 30px -12px rgba(22,33,62,.35);
+  --shadow-pop:0 16px 40px -14px rgba(191,78,48,.45);
+}
+
+*{box-sizing:border-box;}
+
+body{
+  font-family:var(--font-body);
+  background:var(--crema);
+  color:var(--tinta);
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4,.display{
+  font-family:var(--font-display);
+  letter-spacing:-.01em;
+}
+
+.font-mono{ font-family:var(--font-mono); }
+
+a{ color:var(--terracota-2); }
+a:hover{ color:var(--terracota); }
+
+/* Focus visible accesible en toda la plataforma */
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible{
+  outline:3px solid var(--ocre);
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+
+/* ---------- Franja tejida (elemento firma: divisor "telar") ---------- */
+.telar{
+  height:14px;
+  width:100%;
+  background:repeating-linear-gradient(
+    120deg,
+    var(--terracota) 0 18px,
+    var(--ocre) 18px 30px,
+    var(--verde-valle) 30px 42px,
+    var(--magenta) 42px 54px,
+    var(--noche) 54px 66px
+  );
+  background-size:220% 100%;
+  animation:tejer 18s linear infinite;
+}
+.telar.telar-fina{ height:6px; }
+
+@keyframes tejer{
+  0%{ background-position:0% 0; }
+  100%{ background-position:100% 0; }
+}
+
+/* ---------- Navbar ---------- */
+.navbar-kusi{
+  background:var(--noche);
+  border-bottom:4px solid var(--terracota);
+}
+.navbar-kusi .navbar-brand{
+  font-family:var(--font-display);
+  font-weight:700;
+  color:var(--crema);
+  font-size:1.5rem;
+}
+.navbar-kusi .navbar-brand span{ color:var(--ocre); }
+.navbar-kusi .nav-link{
+  color:rgba(247,241,227,.82);
+  font-weight:500;
+}
+.navbar-kusi .nav-link.active,
+.navbar-kusi .nav-link:hover{ color:var(--ocre); }
+
+.btn-idioma{
+  border:2px solid var(--ocre);
+  color:var(--ocre);
+  background:transparent;
+  border-radius:999px;
+  padding:.3rem .9rem;
+  font-weight:700;
+  font-size:.85rem;
+  font-family:var(--font-mono);
+}
+.btn-idioma:hover{ background:var(--ocre); color:var(--noche); }
+
+/* ---------- Botones ---------- */
+.btn-kusi-primario{
+  background:var(--terracota);
+  border:none;
+  color:#fff;
+  font-weight:700;
+  border-radius:999px;
+  padding:.75rem 1.75rem;
+  box-shadow:var(--shadow-pop);
+  transition:transform .15s ease, background .15s ease;
+}
+.btn-kusi-primario:hover{ background:var(--terracota-2); transform:translateY(-2px); color:#fff; }
+
+.btn-kusi-secundario{
+  background:transparent;
+  border:2px solid var(--noche);
+  color:var(--noche);
+  font-weight:700;
+  border-radius:999px;
+  padding:.7rem 1.6rem;
+}
+.btn-kusi-secundario:hover{ background:var(--noche); color:var(--crema); }
+
+.btn-kusi-verde{
+  background:var(--verde-valle);
+  border:none;color:#fff;font-weight:700;border-radius:999px;padding:.75rem 1.75rem;
+}
+.btn-kusi-verde:hover{ background:var(--verde-valle-2); color:#fff; }
+
+/* ---------- Hero ---------- */
+.hero-kusi{
+  background:
+    radial-gradient(circle at 82% 18%, rgba(232,163,61,.35), transparent 45%),
+    radial-gradient(circle at 8% 85%, rgba(169,63,101,.28), transparent 40%),
+    var(--noche);
+  color:var(--crema);
+  position:relative;
+  overflow:hidden;
+  padding:5.5rem 0 4rem;
+}
+.hero-kusi .eyebrow{
+  font-family:var(--font-mono);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--ocre);
+  font-size:.8rem;
+}
+.hero-kusi h1{
+  font-size:clamp(2.3rem, 4.4vw, 3.8rem);
+  font-weight:700;
+  line-height:1.06;
+}
+.hero-kusi p.lead{
+  color:rgba(247,241,227,.85);
+  max-width:46ch;
+}
+
+/* Montañas de fondo del altiplano, en SVG puro (sin fotos) */
+.altiplano-silueta{
+  position:absolute;
+  left:0; right:0; bottom:-2px;
+  height:130px;
+  opacity:.9;
+}
+
+/* ---------- Tarjetas ---------- */
+.card-kusi{
+  background:#fff;
+  border:none;
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  overflow:hidden;
+  height:100%;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.card-kusi:hover{ transform:translateY(-4px); box-shadow:0 20px 40px -14px rgba(22,33,62,.28); }
+.card-kusi .card-icono{
+  width:56px;height:56px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;color:#fff;
+  margin-bottom:1rem;
+}
+
+.bg-terracota{ background:var(--terracota) !important; }
+.bg-ocre{ background:var(--ocre) !important; }
+.bg-verde{ background:var(--verde-valle) !important; }
+.bg-magenta{ background:var(--magenta) !important; }
+.bg-noche{ background:var(--noche) !important; }
+.text-terracota{ color:var(--terracota) !important; }
+.text-ocre{ color:var(--ocre) !important; }
+.text-verde{ color:var(--verde-valle) !important; }
+.text-noche{ color:var(--noche) !important; }
+.text-magenta{ color:var(--magenta) !important; }
+
+/* ---------- Niveles / gamificación ---------- */
+.chip-nivel{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:var(--noche);color:var(--ocre);
+  font-family:var(--font-mono);font-weight:700;font-size:.8rem;
+  border-radius:999px;padding:.25rem .8rem;
+}
+.barra-progreso-kusi{
+  height:14px;border-radius:999px;background:var(--crema-2);overflow:hidden;
+}
+.barra-progreso-kusi .relleno{
+  height:100%;background:linear-gradient(90deg,var(--terracota),var(--ocre));
+  border-radius:999px;transition:width .6s ease;
+}
+
+.medalla{
+  width:78px;height:78px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;color:#fff;
+  background:linear-gradient(160deg,var(--ocre),var(--terracota));
+  box-shadow:var(--shadow-pop);
+  margin:0 auto .5rem;
+  border:4px solid #fff;
+}
+.medalla.bloqueada{
+  background:#D9D2C2;color:#B4AB94;box-shadow:none;filter:grayscale(1);opacity:.7;
+}
+
+/* ---------- Sidebar dashboard ---------- */
+.sidebar-kusi{
+  background:var(--noche);color:var(--crema);
+  min-height:100%;
+  border-radius:var(--radius-lg);
+  padding:1.5rem 1rem;
+}
+.sidebar-kusi .nav-link{
+  color:rgba(247,241,227,.78);
+  border-radius:12px;padding:.65rem .9rem;
+  font-weight:500;margin-bottom:.25rem;
+}
+.sidebar-kusi .nav-link.active,
+.sidebar-kusi .nav-link:hover{ background:rgba(232,163,61,.15); color:var(--ocre); }
+
+/* ---------- Rueda de emociones ---------- */
+.rueda-contenedor{
+  position:relative;
+  width:min(360px,80vw);
+  aspect-ratio:1/1;
+  margin:0 auto;
+}
+.rueda-svg{
+  width:100%;height:100%;
+  transition:transform 3.2s cubic-bezier(.15,.9,.1,1);
+  filter:drop-shadow(0 12px 22px rgba(22,33,62,.35));
+}
+.rueda-puntero{
+  position:absolute; top:-14px; left:50%;
+  transform:translateX(-50%);
+  width:0;height:0;
+  border-left:14px solid transparent;
+  border-right:14px solid transparent;
+  border-top:24px solid var(--terracota);
+  z-index:5;
+}
+
+/* ---------- Footer ---------- */
+footer.footer-kusi{
+  background:var(--noche);
+  color:rgba(247,241,227,.7);
+}
+footer.footer-kusi a{ color:var(--crema); }
+footer.footer-kusi h6{ color:var(--ocre); font-family:var(--font-mono); letter-spacing:.08em; }
+
+/* ---------- Utilidades ---------- */
+.seccion{ padding:4.5rem 0; }
+.card-actividad .badge-nivel{
+  font-family:var(--font-mono); font-weight:700; font-size:.72rem;
+}
+.pill-idioma{
+  background:var(--crema-2); border-radius:999px; padding:.15rem .6rem;
+  font-family:var(--font-mono); font-size:.72rem; color:var(--noche);
+}
+[lang="ay"]{ font-style:italic; opacity:.92; }
+
+.avatar-familia{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--ocre);color:var(--noche);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-family:var(--font-mono);
+}
+
+/* =========================================================================
+   ARCADE KUSISIÑA — componentes de minijuegos
+   ========================================================================= */
+
+/* --- Barra superior de estado (XP / monedas / nivel) --- */
+.barra-estado-jugador{
+  background:var(--noche);
+  border-radius:999px;
+  padding:.5rem 1.1rem;
+  display:inline-flex; align-items:center; gap:1.1rem;
+  color:var(--crema);
+  font-family:var(--font-mono);
+  font-weight:700;
+  font-size:.85rem;
+  box-shadow:var(--shadow-soft);
+}
+.barra-estado-jugador .item-estado{ display:flex; align-items:center; gap:.35rem; }
+.barra-estado-jugador .item-estado i{ font-size:1rem; }
+.barra-estado-jugador .item-xp i{ color:var(--verde-valle); }
+.barra-estado-jugador .item-monedas i{ color:var(--ocre); }
+.barra-estado-jugador .item-nivel i{ color:var(--magenta); }
+
+/* --- Tarjetas del catálogo de juegos --- */
+.tarjeta-juego{
+  background:#fff;border:none;border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft); padding:1.5rem; height:100%;
+  display:flex; flex-direction:column;
+  transition:transform .18s ease, box-shadow .18s ease;
+  position:relative; overflow:hidden;
+}
+.tarjeta-juego:not(.bloqueada):hover{ transform:translateY(-4px); box-shadow:0 20px 40px -14px rgba(22,33,62,.28); cursor:pointer; }
+.tarjeta-juego .icono-juego{
+  width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;color:#fff;margin-bottom:.9rem;
+  background:linear-gradient(160deg,var(--terracota),var(--magenta));
+}
+.tarjeta-juego .recompensas-juego{
+  display:flex; gap:.75rem; font-family:var(--font-mono); font-size:.78rem; color:var(--noche); margin:.6rem 0;
+}
+.tarjeta-juego.bloqueada{ opacity:.6; filter:grayscale(.4); }
+.tarjeta-juego .candado{
+  position:absolute; top:1rem; right:1rem; font-size:1.3rem; color:var(--noche); opacity:.5;
+}
+.tarjeta-juego .requisito-nivel{
+  font-size:.72rem; font-family:var(--font-mono); color:var(--terracota-2); margin-top:auto; padding-top:.5rem;
+}
+
+/* --- Memorama --- */
+.grid-memorama{
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:.6rem; max-width:480px; margin:0 auto;
+}
+.carta-memoria{
+  aspect-ratio:1/1; border-radius:14px; position:relative; cursor:pointer;
+  perspective:600px;
+}
+.carta-memoria .cara{
+  position:absolute; inset:0; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  backface-visibility:hidden; transition:transform .5s ease;
+  font-size:1.8rem; font-weight:700;
+}
+.carta-memoria .cara-atras{ background:var(--noche); color:var(--ocre); font-size:1.6rem; }
+.carta-memoria .cara-frente{ background:#fff; border:3px solid var(--ocre); transform:rotateY(180deg); flex-direction:column; gap:.2rem; }
+.carta-memoria.volteada .cara-atras{ transform:rotateY(-180deg); }
+.carta-memoria.volteada .cara-frente{ transform:rotateY(0); }
+.carta-memoria.acertada .cara-frente{ border-color:var(--verde-valle); background:#eef7f1; }
+.carta-memoria .cara-frente small{ font-size:.62rem; font-family:var(--font-body); font-weight:600; color:var(--noche); }
+
+/* --- Quiz genérico (identificar / verdadero-falso / trivia) --- */
+.opcion-quiz{
+  display:block; width:100%; text-align:left;
+  background:#fff; border:2px solid var(--crema-2); border-radius:14px;
+  padding:.85rem 1.1rem; margin-bottom:.6rem; font-weight:600; color:var(--tinta);
+  transition:all .15s ease;
+}
+.opcion-quiz:hover{ border-color:var(--ocre); background:var(--crema); }
+.opcion-quiz.correcta{ border-color:var(--verde-valle); background:#eef7f1; color:var(--verde-valle-2); }
+.opcion-quiz.incorrecta{ border-color:var(--terracota); background:#fbeae6; color:var(--terracota-2); }
+.opcion-quiz:disabled{ opacity:.7; cursor:default; }
+
+.barra-vidas i{ color:var(--terracota); font-size:1.1rem; margin-right:.15rem; }
+.barra-vidas i.perdida{ color:#D9D2C2; }
+
+/* --- Emparejar (dos columnas) --- */
+.columna-emparejar .ficha-emparejar{
+  background:#fff; border:2px solid var(--crema-2); border-radius:12px;
+  padding:.7rem 1rem; margin-bottom:.6rem; font-weight:600; cursor:pointer; transition:all .15s ease;
+}
+.columna-emparejar .ficha-emparejar.seleccionada{ border-color:var(--ocre); background:var(--crema); }
+.columna-emparejar .ficha-emparejar.emparejada{ border-color:var(--verde-valle); background:#eef7f1; opacity:.6; cursor:default; }
+.columna-emparejar .ficha-emparejar.error{ border-color:var(--terracota); animation:sacudir .3s; }
+@keyframes sacudir{ 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);} }
+
+/* --- Rompecabezas deslizante --- */
+.grid-rompecabezas{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;
+  width:min(320px, 80vw); aspect-ratio:1/1; margin:0 auto;
+  background:var(--noche); padding:6px; border-radius:16px;
+}
+.ficha-rompecabezas{
+  background:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-size:2rem; cursor:pointer; transition:transform .12s ease;
+}
+.ficha-rompecabezas:hover{ transform:scale(1.03); }
+.ficha-rompecabezas.vacia{ background:transparent; cursor:default; }
+
+/* --- Historia interactiva --- */
+.panel-historia{
+  background:linear-gradient(160deg,#fff,var(--crema)); border-radius:var(--radius-lg);
+  padding:2rem; box-shadow:var(--shadow-soft);
+}
+.opcion-historia{
+  display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--crema-2);
+  border-radius:14px;padding:.9rem 1.1rem;margin-bottom:.7rem;font-weight:600;
+  transition:all .15s ease;
+}
+.opcion-historia:hover{ border-color:var(--magenta); background:#fdf2f6; }
+
+/* --- Decisiones / situaciones familiares --- */
+.tarjeta-decision{
+  background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);padding:2rem;
+}
+.opcion-decision{
+  display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--crema-2);
+  border-radius:14px;padding:.9rem 1.1rem;margin-bottom:.7rem;font-weight:600;transition:all .15s ease;
+}
+.opcion-decision:hover{ border-color:var(--verde-valle); background:var(--crema); }
+.opcion-decision.buena{ border-color:var(--verde-valle); background:#eef7f1; }
+.opcion-decision.regular{ border-color:var(--ocre); background:#fdf6e8; }
+.opcion-decision.mala{ border-color:var(--terracota); background:#fbeae6; }
+
+/* --- Barra de XP animada dentro del resultado --- */
+.barra-xp-resultado{
+  height:16px;border-radius:999px;background:var(--crema-2);overflow:hidden;
+}
+.barra-xp-resultado .relleno{
+  height:100%;background:linear-gradient(90deg,var(--verde-valle),var(--ocre));
+  border-radius:999px;transition:width 1s ease;
+}
+
+/* --- Insignia flotante de recompensa (moneda) --- */
+.moneda-flotante{
+  display:inline-flex;align-items:center;gap:.3rem;
+  background:#FFF6E5;border:1px solid var(--ocre);color:#8a6416;
+  border-radius:999px;padding:.15rem .7rem;font-family:var(--font-mono);font-weight:700;font-size:.8rem;
+}

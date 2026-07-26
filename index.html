@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kusisiña · Familias que juegan, familias que crecen</title>
+<meta name="description" content="Plataforma boliviana de co-playing y crianza positiva para prevenir la violencia hacia niñas, niños y adolescentes. La Paz y El Alto.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-kusi sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Kusi<span>siña</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navKusi" aria-controls="navKusi" aria-expanded="false" aria-label="Abrir menú de navegación" style="border-color:rgba(247,241,227,.4)">
+      <i class="bi bi-list text-white fs-3"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navKusi">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link active" href="index.html" data-i18n="nav_inicio">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="actividades.html" data-i18n="nav_actividades">Actividades</a></li>
+        <li class="nav-item"><a class="nav-link" href="juegos.html" data-i18n="nav_juegos">Arcade</a></li>
+        <li class="nav-item"><a class="nav-link" href="educacion.html" data-i18n="nav_educacion">Aprender</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html" data-i18n="nav_dashboard">Mi familia</a></li>
+        <li class="nav-item ms-lg-2">
+          <button class="btn-idioma" data-accion="alternar-idioma" aria-label="Cambiar idioma / Aru tukuyaña" title="Español / Aymara"><span data-i18n-toggle-label>AY</span></button>
+        </li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a href="registro.html" class="btn btn-kusi-primario btn-sm" data-i18n="nav_registro">Crear cuenta familiar</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="telar" aria-hidden="true"></div>
+
+<!-- HERO -->
+<header class="hero-kusi">
+  <div class="container position-relative" style="z-index:2;">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <div class="eyebrow mb-3" data-i18n="hero_eyebrow">Co-Playing · Crianza positiva · La Paz — El Alto</div>
+        <h1 data-i18n="hero_titulo">Familias que juegan juntas, crecen juntas.</h1>
+        <p class="lead mt-3" data-i18n="hero_texto">Kusisiña es un espacio donde madres, padres, cuidadores y niñas, niños y adolescentes aprenden a comunicarse, regular emociones y prevenir la violencia, jugando en equipo.</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a href="registro.html" class="btn-kusi-primario" data-i18n="hero_cta1"><i class="bi bi-flower1 me-1"></i>Crear mi cuenta familiar</a>
+          <a href="#como-funciona" class="btn btn-outline-light rounded-pill px-4" data-i18n="hero_cta2">Ver cómo funciona</a>
+        </div>
+        <div class="d-flex align-items-center gap-2 mt-4 font-mono" style="color:var(--ocre)">
+          <i class="bi bi-people-fill fs-4"></i>
+          <span id="contadorFamilias" class="fs-4 fw-bold">0</span>
+          <span class="small text-white-50" data-i18n="hero_dato">familias acompañadas en La Paz y El Alto</span>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="rueda-contenedor">
+          <div class="rueda-puntero" aria-hidden="true"></div>
+          <svg class="rueda-svg" id="ruedaHero" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"
+               role="button" tabindex="0" aria-label="Girar la rueda de emociones">
+            <!-- generado por JS -->
+          </svg>
+        </div>
+        <p class="text-center small text-white-50 mt-2 font-mono" id="ruedaHeroDesc">Rueda de Emociones — jueguen a girarla</p>
+      </div>
+    </div>
+  </div>
+  <svg class="altiplano-silueta" viewBox="0 0 1440 150" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <path d="M0,150 L0,90 L160,40 L280,80 L420,20 L560,70 L700,10 L860,60 L1000,25 L1160,75 L1300,35 L1440,90 L1440,150 Z" fill="#1F2E52" opacity="0.7"/>
+    <path d="M0,150 L0,110 L200,70 L360,105 L520,55 L680,100 L860,60 L1040,105 L1220,65 L1440,110 L1440,150 Z" fill="#F7F1E3"/>
+  </svg>
+</header>
+<div class="telar telar-fina" aria-hidden="true"></div>
+
+<!-- QUÉ ES CO-PLAYING -->
+<section class="seccion">
+  <div class="container">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-7">
+        <h2 class="fs-1 text-noche" data-i18n="seccion_que_titulo">¿Qué es el Co-Playing?</h2>
+        <p class="text-muted fs-5" data-i18n="seccion_que_texto">Es aprender jugando, en pareja: una persona adulta y una niña, niño o adolescente resuelven juntas cada actividad. Nadie juega solo — el vínculo es parte del método.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="card-kusi p-4">
+          <div class="card-icono bg-terracota"><i class="bi bi-controller"></i></div>
+          <h3 class="fs-5" data-i18n="pilar1_t">Gamificación</h3>
+          <p class="text-muted small mb-0" data-i18n="pilar1_d">Puntos, insignias y niveles que celebran cada paso hacia una crianza sin violencia.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card-kusi p-4">
+          <div class="card-icono bg-verde"><i class="bi bi-signpost-split"></i></div>
+          <h3 class="fs-5" data-i18n="pilar2_t">Niveles por etapas</h3>
+          <p class="text-muted small mb-0" data-i18n="pilar2_d">De Semilla a Árbol Fuerte: el recorrido crece con la confianza de tu familia.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card-kusi p-4">
+          <div class="card-icono bg-magenta"><i class="bi bi-hand-thumbs-up"></i></div>
+          <h3 class="fs-5" data-i18n="pilar3_t">Crianza positiva</h3>
+          <p class="text-muted small mb-0" data-i18n="pilar3_d">Disciplina con límites claros, sin gritos ni golpes: acuerdos, no castigos.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card-kusi p-4">
+          <div class="card-icono bg-ocre"><i class="bi bi-heart"></i></div>
+          <h3 class="fs-5" data-i18n="pilar4_t">Educación emocional</h3>
+          <p class="text-muted small mb-0" data-i18n="pilar4_d">Nombrar lo que sentimos es el primer paso para no hacernos daño.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="seccion bg-white" id="como-funciona">
+  <div class="container">
+    <h2 class="fs-1 text-noche text-center mb-5" data-i18n="como_titulo">Cómo se juega en casa</h2>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3 text-center">
+        <div class="medalla"><i class="bi bi-people"></i></div>
+        <h3 class="fs-6 fw-bold" data-i18n="como1_t">Crean su familia</h3>
+        <p class="text-muted small" data-i18n="como1_d">Una cuenta para la persona adulta y un perfil para cada niña o niño.</p>
+      </div>
+      <div class="col-md-6 col-lg-3 text-center">
+        <div class="medalla"><i class="bi bi-joystick"></i></div>
+        <h3 class="fs-6 fw-bold" data-i18n="como2_t">Eligen una actividad</h3>
+        <p class="text-muted small" data-i18n="como2_d">Juegos cortos (10–15 min) para hacer juntos, sin pantallas de por medio la mayor parte del tiempo.</p>
+      </div>
+      <div class="col-md-6 col-lg-3 text-center">
+        <div class="medalla"><i class="bi bi-chat-heart"></i></div>
+        <h3 class="fs-6 fw-bold" data-i18n="como3_t">Conversan y suman puntos</h3>
+        <p class="text-muted small" data-i18n="como3_d">Cada actividad termina en una conversación guiada. Ahí está la magia.</p>
+      </div>
+      <div class="col-md-6 col-lg-3 text-center">
+        <div class="medalla"><i class="bi bi-trophy"></i></div>
+        <h3 class="fs-6 fw-bold" data-i18n="como4_t">Suben de nivel en familia</h3>
+        <p class="text-muted small" data-i18n="como4_d">El progreso es compartido: gana la familia, no una sola persona.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="telar" aria-hidden="true"></div>
+
+<!-- CTA FINAL -->
+<section class="seccion text-center" style="background:var(--crema-2)">
+  <div class="container">
+    <h2 class="fs-1 text-noche" data-i18n="cta_final_t">Bolivia sin golpes ni gritos empieza en cada hogar.</h2>
+    <a href="registro.html" class="btn-kusi-verde mt-3 d-inline-block" data-i18n="cta_final_b">Empezar ahora, es gratis</a>
+  </div>
+</section>
+
+<footer class="footer-kusi pt-5 pb-4">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="navbar-brand mb-2">Kusi<span style="color:var(--ocre)">siña</span></div>
+        <p class="small">Plataforma boliviana de co-playing y crianza positiva, para familias de La Paz y El Alto. Jugar en familia también es prevenir la violencia.</p>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h6 data-i18n="footer_recursos">Recursos</h6>
+        <ul class="list-unstyled small">
+          <li><a href="actividades.html">Actividades</a></li>
+          <li><a href="educacion.html">Aprender</a></li>
+          <li><a href="dashboard.html">Mi familia</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h6 data-i18n="footer_metodologia">Metodología</h6>
+        <ul class="list-unstyled small">
+          <li>Co-Playing</li>
+          <li>Crianza positiva</li>
+          <li>Educación emocional</li>
+          <li>Gamificación por niveles</li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h6 data-i18n="footer_ayuda">Líneas de ayuda Bolivia</h6>
+        <ul class="list-unstyled small">
+          <li><i class="bi bi-telephone-fill me-1"></i> Línea 156 — violencia niñez (La Paz)</li>
+          <li><i class="bi bi-telephone-fill me-1"></i> Familia Segura: 800 11 30 40</li>
+          <li><i class="bi bi-telephone-fill me-1"></i> FELCV mujeres: 800 10 41 00</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="border-secondary my-4">
+    <p class="small text-center mb-1">© 2026 Kusisiña · Proyecto de impacto social sin fines de lucro · Hecho en La Paz, Bolivia</p>
+    <p class="small text-center mb-0"><a href="facilitador.html"><i class="bi bi-person-workspace me-1"></i>Panel de facilitador/a comunitario</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/db.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Rueda de emociones decorativa en el hero (versión simple, solo visual)
+  (function(){
+    const emociones = [
+      {n:"Alegría", c:"#E8A33D"}, {n:"Tristeza", c:"#1F2E52"}, {n:"Enojo", c:"#BF4E30"},
+      {n:"Miedo", c:"#3D7A5C"}, {n:"Sorpresa", c:"#A93F65"}, {n:"Calma", c:"#8AA5A0"}
+    ];
+    const svg = document.getElementById("ruedaHero");
+    const cx=150, cy=150, r=140;
+    const paso = 360/emociones.length;
+    let html = "";
+    emociones.forEach((e,i)=>{
+      const a0 = (i*paso - 90) * Math.PI/180;
+      const a1 = ((i+1)*paso - 90) * Math.PI/180;
+      const x0 = cx + r*Math.cos(a0), y0 = cy + r*Math.sin(a0);
+      const x1 = cx + r*Math.cos(a1), y1 = cy + r*Math.sin(a1);
+      html += `<path d="M${cx},${cy} L${x0},${y0} A${r},${r} 0 0,1 ${x1},${y1} Z" fill="${e.c}" stroke="#F7F1E3" stroke-width="2"/>`;
+      const am = (a0+a1)/2;
+      const tx = cx + (r*0.62)*Math.cos(am), ty = cy + (r*0.62)*Math.sin(am);
+      html += `<text x="${tx}" y="${ty}" fill="#fff" font-size="13" font-family="Work Sans" text-anchor="middle" transform="rotate(${(am*180/Math.PI)+90},${tx},${ty})">${e.n}</text>`;
+    });
+    html += `<circle cx="${cx}" cy="${cy}" r="26" fill="#16213E" stroke="#F7F1E3" stroke-width="3"/>`;
+    svg.innerHTML = html;
+    let girado = 0;
+    const girar = ()=>{
+      girado += 900 + Math.random()*400;
+      svg.style.transform = `rotate(${girado}deg)`;
+    };
+    svg.addEventListener("click", girar);
+    svg.addEventListener("keydown", (e)=>{
+      if (e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        girar();
+      }
+    });
+  })();
+
+  // Contador animado de familias (simulado, dato ilustrativo del proyecto piloto)
+  (function(){
+    const el = document.getElementById("contadorFamilias");
+    let n = 0; const meta = 128;
+    const iv = setInterval(()=>{
+      n += 4; if (n>=meta){ n=meta; clearInterval(iv);}
+      el.textContent = n;
+    }, 25);
+  })();
+</script>
+</body>
+</html>

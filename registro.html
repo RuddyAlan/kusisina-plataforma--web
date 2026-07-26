@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear cuenta familiar · Kusisiña</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-noche" style="min-height:100vh;">
+
+<nav class="navbar navbar-kusi">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Kusi<span>siña</span></a>
+    <button class="btn-idioma" data-accion="alternar-idioma" aria-label="Cambiar idioma / Aru tukuyaña" title="Español / Aymara"><span data-i18n-toggle-label>AY</span></button>
+  </div>
+</nav>
+<div class="telar telar-fina" aria-hidden="true"></div>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card-kusi p-4 p-md-5">
+        <h1 class="fs-2 text-noche mb-1" data-i18n="registro_titulo">Creemos su cuenta familiar</h1>
+        <p class="text-muted mb-4">Un perfil por cada persona adulta y niña, niño o adolescente que va a jugar.</p>
+
+        <form id="formRegistro" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold" data-i18n="registro_familia">Nombre de la familia</label>
+              <input type="text" class="form-control" id="fFamilia" placeholder="Ej. Familia Mamani Quispe" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold" data-i18n="registro_ciudad">Municipio</label>
+              <select class="form-select" id="fMunicipio">
+                <option>La Paz</option>
+                <option>El Alto</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold" data-i18n="registro_adulto">Tu nombre (persona adulta)</label>
+              <input type="text" class="form-control" id="fAdulto" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold" data-i18n="registro_correo">Correo electrónico</label>
+              <input type="email" class="form-control" id="fCorreo" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold" data-i18n="registro_clave">Contraseña</label>
+              <input type="password" class="form-control" id="fClave" minlength="4" required>
+            </div>
+          </div>
+
+          <hr class="my-4">
+          <label class="form-label fw-semibold d-block" data-i18n="registro_ninos">Perfiles de niñas, niños o adolescentes</label>
+          <div id="listaNinos" class="d-flex flex-column gap-2 mb-2"></div>
+          <button type="button" id="btnAgregarNino" class="btn btn-kusi-secundario btn-sm">
+            <i class="bi bi-plus-circle me-1"></i><span data-i18n="registro_agregarNino">Agregar niña/niño</span>
+          </button>
+
+          <button type="submit" class="btn-kusi-primario w-100 mt-4" data-i18n="registro_boton">Crear familia y empezar</button>
+        </form>
+        <p class="text-center small text-muted mt-3">
+          ¿Ya tienen cuenta? <a href="login.html">Ingresar</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/db.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/main.js"></script>
+<script>
+let contadorNinos = 0;
+
+function filaNino(){
+  contadorNinos++;
+  const id = `nino_${contadorNinos}`;
+  const div = document.createElement("div");
+  div.className = "row g-2 align-items-center";
+  div.innerHTML = `
+    <div class="col-6"><input type="text" class="form-control form-control-sm" placeholder="Nombre" data-campo="nombre" required></div>
+    <div class="col-4"><input type="number" min="2" max="17" class="form-control form-control-sm" placeholder="Edad" data-campo="edad" required></div>
+    <div class="col-2"><button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="this.closest('.row').remove()"><i class="bi bi-trash"></i></button></div>
+  `;
+  div.id = id;
+  document.getElementById("listaNinos").appendChild(div);
+}
+document.getElementById("btnAgregarNino").addEventListener("click", filaNino);
+filaNino(); // al menos un perfil por defecto
+
+document.getElementById("formRegistro").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const formulario = e.target;
+  formulario.classList.add("was-validated");
+  if (!formulario.checkValidity()) return;
+  if (!(await iniciarDB())) return;
+
+  const familia = document.getElementById("fFamilia").value.trim();
+  const adulto = document.getElementById("fAdulto").value.trim();
+  const correo = document.getElementById("fCorreo").value.trim();
+  const clave = document.getElementById("fClave").value;
+  const municipio = document.getElementById("fMunicipio").value;
+
+  const filasNinos = [...document.querySelectorAll("#listaNinos .row")];
+  const ninos = filasNinos.map(f=>({
+    nombre: f.querySelector("[data-campo='nombre']").value.trim(),
+    edad: f.querySelector("[data-campo='edad']").value
+  })).filter(n=>n.nombre);
+
+  if (!familia || !adulto || !correo || !clave){
+    toast(I18N.idiomaActual()==="es" ? "Completa los datos de la familia" : "Familia datonaka phuqhaña", "warning");
+    return;
+  }
+  if (ninos.length === 0){
+    toast(I18N.idiomaActual()==="es" ? "Agrega al menos una niña o niño" : "Yaqha mä wawa yapaña", "warning");
+    return;
+  }
+
+  const existe = DB.query(`SELECT id FROM familias WHERE correo=?`, [correo]);
+  if (existe.length){
+    Swal.fire("Ese correo ya tiene una familia registrada", "", "error");
+    return;
+  }
+
+  const codigo = DB.generarCodigoFamilia();
+  const salt = DB.generarSalt();
+  const claveHash = await DB.hashClave(clave, salt);
+  DB.run(`INSERT INTO familias (codigo, nombre, municipio, correo, clave_hash, clave_salt) VALUES (?,?,?,?,?,?)`,
+    [codigo, familia, municipio, correo, claveHash, salt]);
+  const famId = DB.query(`SELECT id FROM familias WHERE codigo=?`, [codigo])[0].id;
+
+  DB.run(`INSERT INTO integrantes (familia_id, nombre, rol) VALUES (?,?,?)`, [famId, adulto, "adulto"]);
+  ninos.forEach(n=>{
+    DB.run(`INSERT INTO integrantes (familia_id, nombre, rol, edad) VALUES (?,?,?,?)`, [famId, n.nombre, "nino", n.edad || null]);
+  });
+
+  SESION.guardar(famId);
+
+  Swal.fire({
+    icon:"success",
+    title: I18N.idiomaActual()==="es" ? "¡Familia creada!" : "¡Familia lurataxa!",
+    html: `<p>${I18N.idiomaActual()==="es" ? "Guarda este código de familia:" : "Familia código imaña:"}</p>
+           <div class="chip-nivel fs-5">${codigo}</div>`,
+    confirmButtonText: I18N.idiomaActual()==="es" ? "Ir a mi tablero" : "Sarantaña",
+    confirmButtonColor:"#3D7A5C"
+  }).then(()=> window.location.href = "dashboard.html");
+});
+</script>
+</body>
+</html>

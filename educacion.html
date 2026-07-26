@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprender · Kusisiña</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-kusi">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Kusi<span>siña</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navKusi" aria-controls="navKusi" aria-expanded="false" aria-label="Abrir menú de navegación">
+      <i class="bi bi-list text-white fs-3"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navKusi">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="index.html" data-i18n="nav_inicio">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="actividades.html" data-i18n="nav_actividades">Actividades</a></li>
+        <li class="nav-item"><a class="nav-link" href="juegos.html" data-i18n="nav_juegos">Arcade</a></li>
+        <li class="nav-item"><a class="nav-link active" href="educacion.html" data-i18n="nav_educacion">Aprender</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html" data-i18n="nav_dashboard">Mi familia</a></li>
+        <li class="nav-item"><button class="btn-idioma" data-accion="alternar-idioma" aria-label="Cambiar idioma / Aru tukuyaña" title="Español / Aymara"><span data-i18n-toggle-label>AY</span></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="telar telar-fina" aria-hidden="true"></div>
+
+<section class="seccion pb-3">
+  <div class="container">
+    <h1 class="fs-2 text-noche" data-i18n="edu_titulo">Aprender para acompañar mejor</h1>
+    <p class="text-muted" data-i18n="edu_subtitulo">Ideas breves de crianza positiva, pensadas para el día a día en La Paz y El Alto.</p>
+
+    <div class="row g-4 mt-2">
+      <div class="col-lg-8">
+        <div class="accordion" id="acordeonEdu">
+
+          <div class="accordion-item card-kusi mb-3 border-0">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+                <i class="bi bi-hand-thumbs-up text-verde me-2"></i> Disciplina positiva, no castigo físico
+              </button>
+            </h2>
+            <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#acordeonEdu">
+              <div class="accordion-body">
+                <p>Poner límites no significa gritar ni golpear. La disciplina positiva enseña con acuerdos claros y consecuencias relacionadas al hecho, manteniendo el respeto en ambas direcciones.</p>
+                <ul>
+                  <li>Explica el límite antes de que ocurra la situación, no solo en el momento de la falta.</li>
+                  <li>Usa frases en positivo: "camina despacio" en vez de "no corras".</li>
+                  <li>Sostén la calma tuya primero: un adulto regulado puede ayudar a un niño a regularse.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item card-kusi mb-3 border-0">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                <i class="bi bi-emoji-neutral text-terracota me-2"></i> Reconocer y nombrar emociones
+              </button>
+            </h2>
+            <div id="c2" class="accordion-collapse collapse" data-bs-parent="#acordeonEdu">
+              <div class="accordion-body">
+                <p>Un niño que aprende a nombrar lo que siente ("estoy enojado", "tengo miedo") tiene más herramientas para pedir ayuda en vez de reaccionar con el cuerpo o con violencia.</p>
+                <p class="mb-0">Practicar esto en la infancia reduce, con el tiempo, la probabilidad de que la frustración se exprese como agresión, tanto en niños como en personas adultas.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item card-kusi mb-3 border-0">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3">
+                <i class="bi bi-exclamation-triangle text-magenta me-2"></i> Señales de alerta que conviene observar
+              </button>
+            </h2>
+            <div id="c3" class="accordion-collapse collapse" data-bs-parent="#acordeonEdu">
+              <div class="accordion-body">
+                <p>Ninguna señal por sí sola confirma violencia, pero conviene prestar atención y buscar orientación profesional si notas, de forma sostenida:</p>
+                <ul>
+                  <li>Cambios bruscos de conducta, miedo a volver a casa o a una persona en particular.</li>
+                  <li>Lesiones frecuentes sin explicación clara, o explicaciones que cambian.</li>
+                  <li>Aislamiento, tristeza persistente o retroceso en el desarrollo (ej. vuelve a mojar la cama).</li>
+                </ul>
+                <p class="mb-0">Si observas estas señales, lo más útil es acudir a la Defensoría de la Niñez y Adolescencia de tu municipio o llamar a las líneas de ayuda al final de esta página.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item card-kusi mb-3 border-0">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4">
+                <i class="bi bi-cup-hot text-ocre me-2"></i> Cuidar a quien cuida
+              </button>
+            </h2>
+            <div id="c4" class="accordion-collapse collapse" data-bs-parent="#acordeonEdu">
+              <div class="accordion-body">
+                <p>El estrés económico y la falta de descanso aumentan el riesgo de reaccionar con violencia sin quererlo. Buscar apoyo (familia extendida, vecinas, grupos comunitarios) no es una debilidad: es parte de criar bien.</p>
+                <p class="mb-0">Antes de disciplinar con enojo, una pausa de unos segundos para respirar cambia por completo cómo se siente esa conversación para el niño o niña.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card-kusi p-4 mb-4">
+          <h3 class="fs-6 text-noche"><i class="bi bi-lightbulb text-ocre me-2"></i>Autoevaluación breve</h3>
+          <p class="small text-muted">Una reflexión guiada de 3 preguntas sobre cómo reacciono cuando me frustro. Es privada, nadie más la ve.</p>
+          <button id="btnAutoeval" class="btn-kusi-secundario w-100">Empezar reflexión</button>
+        </div>
+
+        <div class="card-kusi p-4" id="ayuda_titulo_card">
+          <h3 class="fs-6 text-noche" data-i18n="ayuda_titulo">Si tu familia necesita ayuda ahora</h3>
+          <ul class="list-unstyled small mt-3">
+            <li class="mb-3">
+              <strong><i class="bi bi-telephone-fill text-terracota me-1"></i> Línea 156</strong><br>
+              <span class="text-muted">Gratuita, las 24 horas. Atiende casos de violencia contra niñas, niños y adolescentes en La Paz.</span>
+            </li>
+            <li class="mb-3">
+              <strong><i class="bi bi-telephone-fill text-terracota me-1"></i> Familia Segura: 800 11 30 40</strong><br>
+              <span class="text-muted">Apoyo psico-emocional gratuito para todo el país, todos los días de 6:00 a 24:00.</span>
+            </li>
+            <li>
+              <strong><i class="bi bi-building text-terracota me-1"></i> Defensoría de la Niñez y Adolescencia</strong><br>
+              <span class="text-muted">Acude a la oficina de tu municipio (La Paz o El Alto) para orientación legal y psicosocial gratuita.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/db.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.getElementById("btnAutoeval").addEventListener("click", async ()=>{
+  const p1 = await Swal.fire({
+    title:"Cuando algo de mi hijo/a me frustra, primero...",
+    input:"radio",
+    inputOptions:{ a:"Respiro y pienso qué decir", b:"Reacciono al momento, sin pensarlo mucho", c:"Depende mucho del día que tuve" },
+    confirmButtonColor:"#3D7A5C", confirmButtonText:"Siguiente"
+  });
+  if (!p1.value) return;
+  const p2 = await Swal.fire({
+    title:"¿Con quién puedo hablar cuando estoy muy cansada o cansado de criar?",
+    input:"radio",
+    inputOptions:{ a:"Tengo a alguien de confianza", b:"No sé bien a quién recurrir", c:"Prefiero resolverlo sola/o" },
+    confirmButtonColor:"#3D7A5C", confirmButtonText:"Siguiente"
+  });
+  if (!p2.value) return;
+  const p3 = await Swal.fire({
+    title:"¿Qué hago justo después de disciplinar a mi hijo/a?",
+    input:"radio",
+    inputOptions:{ a:"Le explico por qué puse ese límite", b:"Sigo con lo mío, ya se le pasará", c:"A veces me quedo pensando si reaccioné bien" },
+    confirmButtonColor:"#3D7A5C", confirmButtonText:"Ver reflexión"
+  });
+  if (!p3.value) return;
+
+  Swal.fire({
+    icon:"info",
+    title:"Gracias por tomarte este momento",
+    html:`<p class="text-start">No hay respuestas "correctas": esto es solo para notar patrones. Si sentiste que muchas veces reaccionas sin pensarlo o que no tienes con quién hablar, considera visitar la sección "Aprender" seguido, o llamar a Familia Segura (800 11 30 40) para conversar con alguien, incluso sin que sea una emergencia.</p>`,
+    confirmButtonColor:"#BF4E30"
+  });
+});
+</script>
+</body>
+</html>
