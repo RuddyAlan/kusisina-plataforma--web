@@ -124,25 +124,32 @@ document.getElementById("formRegistro").addEventListener("submit", async (e)=>{
     return;
   }
 
-  const existe = DB.query(`SELECT id FROM familias WHERE correo=?`, [correo]);
-  if (existe.length){
-    Swal.fire("Ese correo ya tiene una familia registrada", "", "error");
+  let famId, codigo;
+  try {
+    const existe = await DB.query(`SELECT id FROM familias WHERE correo=?`, [correo]);
+    if (existe.length){
+      Swal.fire("Ese correo ya tiene una familia registrada", "", "error");
+      return;
+    }
+
+    codigo = DB.generarCodigoFamilia();
+    const salt = DB.generarSalt();
+    const claveHash = await DB.hashClave(clave, salt);
+    await DB.run(`INSERT INTO familias (codigo, nombre, municipio, correo, clave_hash, clave_salt) VALUES (?,?,?,?,?,?)`,
+      [codigo, familia, municipio, correo, claveHash, salt]);
+    const filaFam = await DB.query(`SELECT id FROM familias WHERE codigo=?`, [codigo]);
+    famId = filaFam[0].id;
+
+    await DB.run(`INSERT INTO integrantes (familia_id, nombre, rol) VALUES (?,?,?)`, [famId, adulto, "adulto"]);
+    for (const n of ninos){
+      await DB.run(`INSERT INTO integrantes (familia_id, nombre, rol, edad) VALUES (?,?,?,?)`, [famId, n.nombre, "nino", n.edad || null]);
+    }
+
+    SESION.guardar(famId);
+  } catch (error){
+    Swal.fire(I18N.idiomaActual()==="es" ? "No se pudo crear la familia" : "Jan familia lurasiñati", error.message, "error");
     return;
   }
-
-  const codigo = DB.generarCodigoFamilia();
-  const salt = DB.generarSalt();
-  const claveHash = await DB.hashClave(clave, salt);
-  DB.run(`INSERT INTO familias (codigo, nombre, municipio, correo, clave_hash, clave_salt) VALUES (?,?,?,?,?,?)`,
-    [codigo, familia, municipio, correo, claveHash, salt]);
-  const famId = DB.query(`SELECT id FROM familias WHERE codigo=?`, [codigo])[0].id;
-
-  DB.run(`INSERT INTO integrantes (familia_id, nombre, rol) VALUES (?,?,?)`, [famId, adulto, "adulto"]);
-  ninos.forEach(n=>{
-    DB.run(`INSERT INTO integrantes (familia_id, nombre, rol, edad) VALUES (?,?,?,?)`, [famId, n.nombre, "nino", n.edad || null]);
-  });
-
-  SESION.guardar(famId);
 
   Swal.fire({
     icon:"success",
