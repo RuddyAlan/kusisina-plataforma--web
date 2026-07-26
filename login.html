@@ -62,11 +62,19 @@ document.getElementById("formLogin").addEventListener("submit", async (e)=>{
   if (!(await iniciarDB())) return;
   const codigo = document.getElementById("fCodigo").value.trim().toUpperCase();
   const clave = document.getElementById("fClave").value;
-  const fam = DB.query(`SELECT * FROM familias WHERE codigo=?`, [codigo])[0];
 
   const errorCredenciales = () => Swal.fire(
     I18N.idiomaActual()==="es" ? "Código o contraseña incorrectos" : "Código jan walikiti", "", "error"
   );
+
+  let fam;
+  try {
+    const filas = await DB.query(`SELECT * FROM familias WHERE codigo=?`, [codigo]);
+    fam = filas[0];
+  } catch (error){
+    Swal.fire(I18N.idiomaActual()==="es" ? "No se pudo conectar" : "Jan conectasiñati", error.message, "error");
+    return;
+  }
 
   if (!fam) { errorCredenciales(); return; }
 
@@ -74,15 +82,6 @@ document.getElementById("formLogin").addEventListener("submit", async (e)=>{
   if (fam.clave_hash && fam.clave_salt){
     const intento = await DB.hashClave(clave, fam.clave_salt);
     claveValida = intento === fam.clave_hash;
-  } else if (fam.clave){
-    // Cuenta creada antes de esta versión (contraseña aún en texto plano):
-    // si coincide, la migramos a hash en este mismo momento.
-    claveValida = fam.clave === clave;
-    if (claveValida){
-      const salt = DB.generarSalt();
-      const hash = await DB.hashClave(clave, salt);
-      DB.run(`UPDATE familias SET clave_hash=?, clave_salt=?, clave=NULL WHERE id=?`, [hash, salt, fam.id]);
-    }
   }
 
   if (!claveValida){ errorCredenciales(); return; }
