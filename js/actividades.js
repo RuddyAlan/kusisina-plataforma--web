@@ -25,15 +25,15 @@ const PASOS_GUIA = {
 
 (async function(){
   if (!(await iniciarDB())) return;
-  const actividades = DB.query(`SELECT * FROM actividades WHERE categoria != 'juego' ORDER BY nivel ASC`);
+  const actividades = await DB.query(`SELECT * FROM actividades WHERE categoria != 'juego' ORDER BY nivel ASC`);
 
-  renderFiltros();
-  renderGrilla(actividades);
+  renderFiltros(actividades);
+  await renderGrilla(actividades);
 
   document.addEventListener("kusi:idiomaCambiado", ()=> renderGrilla(actividades));
 })();
 
-function renderFiltros(){
+function renderFiltros(actividades){
   const cont = document.getElementById("filtrosNivel");
   const niveles = [{n:"todos", es:"Todos los niveles", ay:"Taqi nivelnaka"}, ...NIVELES.map(n=>({n:n.n, es:n.es, ay:n.ay}))];
   cont.innerHTML = niveles.map(n => `
@@ -43,16 +43,15 @@ function renderFiltros(){
   cont.querySelectorAll("[data-filtro]").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       NIVEL_FILTRO = btn.getAttribute("data-filtro") == "todos" ? "todos" : Number(btn.getAttribute("data-filtro"));
-      renderFiltros();
-      const actividades = DB.query(`SELECT * FROM actividades WHERE categoria != 'juego' ORDER BY nivel ASC`);
+      renderFiltros(actividades);
       renderGrilla(actividades);
     });
   });
 }
 
-function renderGrilla(actividades){
+async function renderGrilla(actividades){
   const famId = SESION.obtener();
-  const completadas = famId ? DB.query(`SELECT actividad_clave FROM progreso WHERE familia_id=?`, [famId]).map(r=>r.actividad_clave) : [];
+  const completadas = famId ? (await DB.query(`SELECT actividad_clave FROM progreso WHERE familia_id=?`, [famId])).map(r=>r.actividad_clave) : [];
   const grilla = document.getElementById("grillaActividades");
   const filtradas = NIVEL_FILTRO === "todos" ? actividades : actividades.filter(a=>a.nivel === NIVEL_FILTRO);
 
@@ -115,7 +114,7 @@ function iniciarActividad(clave){
   }).then(async (r)=>{
     if (r.isConfirmed){
       try {
-        const actividad = DB.query(`SELECT * FROM actividades WHERE clave=?`,[clave])[0];
+        const actividad = (await DB.query(`SELECT * FROM actividades WHERE clave=?`,[clave]))[0];
         if (!actividad) throw new Error(`Actividad "${clave}" no encontrada.`);
         const resultado = await GAMIF.registrarActividad(SESION.obtener(), clave, actividad.puntos);
         mostrarCelebracion(resultado, actividad.puntos);
