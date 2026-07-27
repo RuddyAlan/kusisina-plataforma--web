@@ -15,7 +15,7 @@ let listaIntegrantes = [];
   if (!requerirSesion()) return;
   if (!(await iniciarDB())) return;
   const famId = SESION.obtener();
-  listaIntegrantes = DB.query(`SELECT * FROM integrantes WHERE familia_id=?`, [famId]);
+  listaIntegrantes = await DB.query(`SELECT * FROM integrantes WHERE familia_id=?`, [famId]);
 
   dibujarRueda();
   actualizarTurno();
@@ -99,7 +99,7 @@ async function registrarPuntos(){
   const idioma = I18N.idiomaActual();
   try {
     const famId = SESION.obtener();
-    const actividad = DB.query(`SELECT * FROM actividades WHERE clave='rueda_emociones'`)[0];
+    const actividad = (await DB.query(`SELECT * FROM actividades WHERE clave='rueda_emociones'`))[0];
     if (!actividad) throw new Error("Actividad 'rueda_emociones' no encontrada.");
     const resultado = await GAMIF.registrarActividad(famId, "rueda_emociones", actividad.puntos);
     celebrar(resultado.subioDeNivel ? "grande" : "normal");
