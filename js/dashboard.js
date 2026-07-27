@@ -3,10 +3,10 @@
   if (!(await iniciarDB())) return;
 
   const famId = SESION.obtener();
-  const fam = DB.query(`SELECT * FROM familias WHERE id=?`, [famId])[0];
+  const fam = (await DB.query(`SELECT * FROM familias WHERE id=?`, [famId]))[0];
   if (!fam){ SESION.cerrar(); window.location.href="login.html"; return; }
 
-  const integrantes = DB.query(`SELECT * FROM integrantes WHERE familia_id=?`, [famId]);
+  const integrantes = await DB.query(`SELECT * FROM integrantes WHERE familia_id=?`, [famId]);
   const adulto = integrantes.find(i=>i.rol==="adulto");
 
   document.getElementById("nombreFamilia").textContent = fam.nombre;
@@ -35,7 +35,7 @@
   }).join("");
 
   // --- Insignias ---
-  const obtenidas = DB.query(`SELECT clave FROM insignias WHERE familia_id=?`, [famId]).map(r=>r.clave);
+  const obtenidas = (await DB.query(`SELECT clave FROM insignias WHERE familia_id=?`, [famId])).map(r=>r.clave);
   const grid = document.getElementById("gridInsignias");
   grid.innerHTML = "";
   Object.entries(INSIGNIAS).forEach(([clave, info])=>{
@@ -50,7 +50,7 @@
   });
 
   // --- Gráfico de progreso: puntos acumulados en el tiempo por categoría ---
-  const filas = DB.query(`
+  const filas = await DB.query(`
     SELECT p.fecha, p.puntos_obtenidos, a.categoria
     FROM progreso p JOIN actividades a ON a.clave = p.actividad_clave
     WHERE p.familia_id = ? ORDER BY p.fecha ASC`, [famId]);
@@ -79,7 +79,7 @@
   });
 
   // --- Actividad reciente ---
-  const recientes = DB.query(`
+  const recientes = await DB.query(`
     SELECT p.fecha, p.puntos_obtenidos, a.titulo_es, a.titulo_ay, a.icono
     FROM progreso p JOIN actividades a ON a.clave = p.actividad_clave
     WHERE p.familia_id=? ORDER BY p.fecha DESC LIMIT 6`, [famId]);
