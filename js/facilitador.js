@@ -1,14 +1,10 @@
 /* =========================================================================
    facilitador.js — Panel agregado de familias para facilitadores comunitarios
    -------------------------------------------------------------------------
-   NOTA DE ARQUITECTURA: como no hay backend, este panel lee la misma base
-   SQLite (sql.js) guardada en el localStorage de ESTE navegador/dispositivo.
-   Es el escenario de un taller presencial: la facilitadora lleva su laptop
-   o tablet y las familias se registran ahí mismo durante la sesión. Para un
-   despliegue municipal con muchas facilitadoras y dispositivos distintos,
-   esta capa debería apuntar a una API con una base de datos central
-   (por ejemplo el mismo esquema, pero servido desde SQLite/Postgres en un
-   servidor), manteniendo el resto del panel sin cambios.
+   Lee la base de datos central en Turso (misma que usan todas las familias
+   desde cualquier dispositivo), así que este panel ya muestra el total real
+   de familias registradas en cualquier taller o dispositivo, no solo las de
+   este navegador.
 
    El PIN de acceso es solo una barrera básica para uso en taller (evita que
    una familia entre por error); NO es autenticación segura para producción.
@@ -79,16 +75,16 @@ function etiquetaEstado(estado){
 }
 
 async function cargarDatos(){
-  TODAS_LAS_FAMILIAS = DB.query(`SELECT * FROM familias ORDER BY creada DESC`);
-  renderKPIs();
-  renderGraficos();
+  TODAS_LAS_FAMILIAS = await DB.query(`SELECT * FROM familias ORDER BY creada DESC`);
+  await renderKPIs();
+  await renderGraficos();
   renderTabla();
 }
 
-function renderKPIs(){
+async function renderKPIs(){
   const total = TODAS_LAS_FAMILIAS.length;
   const puntosProm = total ? Math.round(TODAS_LAS_FAMILIAS.reduce((s,f)=>s+f.puntos,0) / total) : 0;
-  const totalActividades = DB.query(`SELECT COUNT(*) c FROM progreso`)[0].c;
+  const totalActividades = (await DB.query(`SELECT COUNT(*) c FROM progreso`))[0].c;
   const necesitanAtencion = TODAS_LAS_FAMILIAS.filter(f => estadoFamilia(f) === "atencion").length;
 
   document.getElementById("kpiFamilias").textContent = total;
@@ -97,7 +93,7 @@ function renderKPIs(){
   document.getElementById("kpiAtencion").textContent = necesitanAtencion;
 }
 
-function renderGraficos(){
+async function renderGraficos(){
   // Distribución por nivel
   const conteoNiveles = NIVELES.map(niv => TODAS_LAS_FAMILIAS.filter(f => GAMIF.nivelPorPuntos(f.puntos).n === niv.n).length);
   if (chartNiveles) chartNiveles.destroy();
@@ -111,7 +107,7 @@ function renderGraficos(){
   });
 
   // Actividades más jugadas (conteo agregando todas las familias)
-  const filas = DB.query(`
+  const filas = await DB.query(`
     SELECT a.titulo_es, COUNT(*) total
     FROM progreso p JOIN actividades a ON a.clave = p.actividad_clave
     GROUP BY a.clave ORDER BY total DESC`);
@@ -178,15 +174,15 @@ function renderTabla(){
   });
 }
 
-function verDetalleFamilia(familiaId){
+async function verDetalleFamilia(familiaId){
   const idioma = I18N.idiomaActual();
   const fam = TODAS_LAS_FAMILIAS.find(f=>f.id===familiaId);
-  const integrantes = DB.query(`SELECT * FROM integrantes WHERE familia_id=?`, [familiaId]);
-  const historial = DB.query(`
+  const integrantes = await DB.query(`SELECT * FROM integrantes WHERE familia_id=?`, [familiaId]);
+  const historial = await DB.query(`
     SELECT p.fecha, p.puntos_obtenidos, a.titulo_es, a.titulo_ay
     FROM progreso p JOIN actividades a ON a.clave = p.actividad_clave
     WHERE p.familia_id=? ORDER BY p.fecha DESC LIMIT 8`, [familiaId]);
-  const insigniasFam = DB.query(`SELECT clave FROM insignias WHERE familia_id=?`, [familiaId]).map(r=>r.clave);
+  const insigniasFam = (await DB.query(`SELECT clave FROM insignias WHERE familia_id=?`, [familiaId])).map(r=>r.clave);
 
   const listaIntegrantes = integrantes.map(i =>
     `<li>${i.rol === "adulto" ? "👤" : "🧒"} ${i.nombre}${i.edad ? " · " + i.edad + " años" : ""}</li>`
