@@ -76,17 +76,17 @@ const GAMIF = (() => {
     await DB.init();
     const { monedasExtra = 0, desempeno = null, perfecto = false } = opciones;
 
-    const actividad = DB.query(`SELECT * FROM actividades WHERE clave=?`, [actividadClave])[0];
+    const actividad = (await DB.query(`SELECT * FROM actividades WHERE clave=?`, [actividadClave]))[0];
     if (!actividad){
       throw new Error(`No se encontró la actividad "${actividadClave}" en la base de datos.`);
     }
     const monedasBase = actividad.monedas || 15;
     const monedasGanadas = monedasBase + monedasExtra;
 
-    DB.run(`INSERT INTO progreso (familia_id, actividad_clave, puntos_obtenidos, monedas_obtenidas, desempeno) VALUES (?,?,?,?,?)`,
+    await DB.run(`INSERT INTO progreso (familia_id, actividad_clave, puntos_obtenidos, monedas_obtenidas, desempeno) VALUES (?,?,?,?,?)`,
       [familiaId, actividadClave, puntosActividad, monedasGanadas, desempeno]);
 
-    const fam = DB.query(`SELECT * FROM familias WHERE id=?`, [familiaId])[0];
+    const fam = (await DB.query(`SELECT * FROM familias WHERE id=?`, [familiaId]))[0];
     const puntosNuevos = fam.puntos + puntosActividad;
     const monedasNuevas = (fam.monedas || 0) + monedasGanadas;
     const nivelAnterior = nivelPorPuntos(fam.puntos).n;
@@ -103,40 +103,40 @@ const GAMIF = (() => {
       racha = 1;
     }
 
-    DB.run(`UPDATE familias SET puntos=?, monedas=?, nivel=?, racha=?, ultima_actividad=? WHERE id=?`,
+    await DB.run(`UPDATE familias SET puntos=?, monedas=?, nivel=?, racha=?, ultima_actividad=? WHERE id=?`,
       [puntosNuevos, monedasNuevas, nivelNuevo, racha, hoy, familiaId]);
 
     const nuevasInsignias = [];
-    const totalActividades = DB.query(`SELECT COUNT(*) c FROM progreso WHERE familia_id=?`,[familiaId])[0].c;
-    const totalJuegos = DB.query(`
+    const totalActividades = (await DB.query(`SELECT COUNT(*) c FROM progreso WHERE familia_id=?`,[familiaId]))[0].c;
+    const totalJuegos = (await DB.query(`
       SELECT COUNT(*) c FROM progreso p JOIN actividades a ON a.clave=p.actividad_clave
-      WHERE p.familia_id=? AND a.categoria='juego'`, [familiaId])[0].c;
-    const juegosDistintos = DB.query(`
+      WHERE p.familia_id=? AND a.categoria='juego'`, [familiaId]))[0].c;
+    const juegosDistintos = (await DB.query(`
       SELECT COUNT(DISTINCT p.actividad_clave) c FROM progreso p JOIN actividades a ON a.clave=p.actividad_clave
-      WHERE p.familia_id=? AND a.categoria='juego'`, [familiaId])[0].c;
-    const yaTiene = clave => DB.query(`SELECT 1 FROM insignias WHERE familia_id=? AND clave=?`,[familiaId, clave]).length > 0;
+      WHERE p.familia_id=? AND a.categoria='juego'`, [familiaId]))[0].c;
+    const yaTiene = async clave => (await DB.query(`SELECT 1 FROM insignias WHERE familia_id=? AND clave=?`,[familiaId, clave])).length > 0;
 
-    function otorgar(clave){
-      if (!yaTiene(clave)){
-        DB.run(`INSERT INTO insignias (familia_id, clave) VALUES (?,?)`, [familiaId, clave]);
+    async function otorgar(clave){
+      if (!(await yaTiene(clave))){
+        await DB.run(`INSERT INTO insignias (familia_id, clave) VALUES (?,?)`, [familiaId, clave]);
         nuevasInsignias.push(clave);
       }
     }
 
-    if (totalActividades === 1) otorgar("primera_actividad");
-    if (totalActividades >= 6) otorgar("seis_actividades");
-    if (racha >= 3) otorgar("racha_3");
-    if (nivelNuevo >= 2 && nivelAnterior < 2) otorgar("nivel_2");
-    if (nivelNuevo >= 4 && nivelAnterior < 4) otorgar("nivel_4");
-    if (actividad && actividad.categoria === "juego" && totalJuegos === 1) otorgar("primer_juego");
-    if (totalJuegos >= 10) otorgar("diez_juegos");
-    if (juegosDistintos >= CLAVES_MINIJUEGOS.length) otorgar("jugador_completo");
-    if (perfecto) otorgar("puntaje_perfecto");
-    if (monedasNuevas >= 100) otorgar("coleccionista");
+    if (totalActividades === 1) await otorgar("primera_actividad");
+    if (totalActividades >= 6) await otorgar("seis_actividades");
+    if (racha >= 3) await otorgar("racha_3");
+    if (nivelNuevo >= 2 && nivelAnterior < 2) await otorgar("nivel_2");
+    if (nivelNuevo >= 4 && nivelAnterior < 4) await otorgar("nivel_4");
+    if (actividad && actividad.categoria === "juego" && totalJuegos === 1) await otorgar("primer_juego");
+    if (totalJuegos >= 10) await otorgar("diez_juegos");
+    if (juegosDistintos >= CLAVES_MINIJUEGOS.length) await otorgar("jugador_completo");
+    if (perfecto) await otorgar("puntaje_perfecto");
+    if (monedasNuevas >= 100) await otorgar("coleccionista");
 
     if (actividad && actividad.categoria === "emocional"){
-      const emocionales = DB.query(`SELECT COUNT(*) c FROM progreso p JOIN actividades a ON a.clave=p.actividad_clave WHERE p.familia_id=? AND a.categoria='emocional'`,[familiaId])[0].c;
-      if (emocionales >= 2) otorgar("categoria_emocional");
+      const emocionales = (await DB.query(`SELECT COUNT(*) c FROM progreso p JOIN actividades a ON a.clave=p.actividad_clave WHERE p.familia_id=? AND a.categoria='emocional'`,[familiaId]))[0].c;
+      if (emocionales >= 2) await otorgar("categoria_emocional");
     }
 
     return {
