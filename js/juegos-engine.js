@@ -33,7 +33,7 @@ const CATALOGO_JUEGOS = [
 
 async function cargarFamilia(){
   const famId = SESION.obtener();
-  FAMILIA = DB.query(`SELECT * FROM familias WHERE id=?`, [famId])[0];
+  FAMILIA = (await DB.query(`SELECT * FROM familias WHERE id=?`, [famId]))[0];
 }
 
 function renderEstadoJugador(){
@@ -46,11 +46,11 @@ function renderEstadoJugador(){
   `;
 }
 
-function renderCatalogo(){
+async function renderCatalogo(){
   const idioma = I18N.idiomaActual();
   const grid = document.getElementById("grillaJuegos");
-  const actividades = DB.query(`SELECT * FROM actividades WHERE categoria='juego' ORDER BY nivel ASC`);
-  const completadas = DB.query(`SELECT actividad_clave, COUNT(*) c FROM progreso WHERE familia_id=? GROUP BY actividad_clave`, [FAMILIA.id]);
+  const actividades = await DB.query(`SELECT * FROM actividades WHERE categoria='juego' ORDER BY nivel ASC`);
+  const completadas = await DB.query(`SELECT actividad_clave, COUNT(*) c FROM progreso WHERE familia_id=? GROUP BY actividad_clave`, [FAMILIA.id]);
   const vecesJugado = clave => (completadas.find(c=>c.actividad_clave===clave) || {c:0}).c;
 
   grid.innerHTML = actividades.map(a => {
@@ -107,7 +107,7 @@ document.getElementById("btnVolverCatalogo").addEventListener("click", volverAlC
 async function finalizarJuego(clave, { aciertos = null, total = null, monedasExtra = 0 } = {}){
   const idioma = I18N.idiomaActual();
   try {
-    const actividad = DB.query(`SELECT * FROM actividades WHERE clave=?`, [clave])[0];
+    const actividad = (await DB.query(`SELECT * FROM actividades WHERE clave=?`, [clave]))[0];
     if (!actividad) throw new Error(`Actividad "${clave}" no encontrada.`);
     const desempeno = (aciertos !== null && total) ? Math.round((aciertos/total)*100) : null;
     const perfecto = desempeno === 100;
