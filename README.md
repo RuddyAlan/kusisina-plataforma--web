@@ -13,29 +13,35 @@ proyecto de impacto social sin fines de lucro, con contenido **bilingüe españo
 ## ✨ ¿Qué incluye la plataforma?
 
 - **Landing page** con la propuesta de valor del proyecto y la metodología de co-playing.
-- **Registro e inicio de sesión familiar** (una cuenta por familia, con perfiles para cada niña/niño).
+- **Registro e inicio de sesión familiar** (una cuenta por familia, con perfiles para cada niña/niño),
+  accesible desde cualquier dispositivo.
 - **6 actividades guiadas de co-playing** (conversación en pareja adulto–niño/a), incluyendo la
   **Rueda de Emociones** interactiva.
 - **Arcade Kusisiña**: 10 minijuegos educativos (memorama, trivia, historia interactiva, verdadero/falso,
   ruleta de desafíos, y más), con desbloqueo progresivo por nivel.
 - **Tablero familiar** con nivel, XP, monedas, racha de días jugados, insignias y gráfico de progreso.
-- **Panel de facilitador/a comunitario/a** con KPIs agregados, gráficos y exportación a CSV — pensado para
-  talleres presenciales.
+- **Panel de facilitador/a comunitario/a** con KPIs agregados de *todas* las familias registradas
+  (sin importar el dispositivo), gráficos y exportación a CSV.
 - **Selector de idioma español / aymara** en toda la interfaz.
 
 ## 🧱 Stack técnico
 
-Aplicación **100% del lado del cliente** (sin backend ni servidor propio):
+Frontend **100% estático** (sin servidor propio que mantener) con base de datos administrada en la nube:
 
 | Capa | Tecnología |
 |---|---|
 | Estructura y estilos | HTML5, CSS3 propio (`css/style.css`), Bootstrap 5, Bootstrap Icons |
-| Lógica | JavaScript ES6+ (sin framework ni build step) |
-| Base de datos | [sql.js](https://github.com/sql-js/sql.js) (SQLite compilado a WebAssembly), persistida en `localStorage` |
+| Lógica | JavaScript ES6+ (sin framework ni build step), async/await |
+| Base de datos | [Turso](https://turso.tech) (libSQL / SQLite distribuido), accedida vía su API HTTP (`fetch`, sin librerías) |
 | UI/UX | SweetAlert2 (diálogos), Chart.js (gráficos), canvas-confetti (celebraciones) |
 
-Al no requerir backend, el sitio puede alojarse en **cualquier hosting estático** — incluido GitHub Pages,
-gratis y sin configuración adicional.
+El sitio se sigue alojando en **cualquier hosting estático** — incluido GitHub Pages, gratis y sin
+configuración adicional — porque toda la lógica corre en el navegador; Turso es un servicio administrado,
+no un backend que el proyecto tenga que operar.
+
+> Anteriormente la base de datos era [sql.js](https://github.com/sql-js/sql.js) (SQLite-WASM) persistida en
+> `localStorage`, lo que aislaba los datos por navegador/dispositivo. Se migró a Turso para que todas las
+> familias puedan acceder a su cuenta desde cualquier dispositivo con el mismo código y contraseña.
 
 ## 📂 Estructura del proyecto
 
@@ -52,10 +58,11 @@ kusisina-plataforma/
 ├── facilitador.html               # Panel comunitario agregado
 ├── css/style.css                   # Sistema de diseño
 ├── js/                               # Lógica de la plataforma
-│   ├── i18n.js            (diccionario ES/AY)
-│   ├── db.js               (motor SQLite/WASM)
-│   ├── gamification.js       (niveles, XP, logros)
-│   ├── main.js                 (sesión, utilidades)
+│   ├── config.js           (credenciales de conexión a Turso — ver abajo)
+│   ├── i18n.js              (diccionario ES/AY)
+│   ├── db.js                 (cliente HTTP hacia Turso/libSQL)
+│   ├── gamification.js         (niveles, XP, logros)
+│   ├── main.js                   (sesión, utilidades)
 │   ├── actividades.js
 │   ├── dashboard.js
 │   ├── facilitador.js
@@ -63,14 +70,35 @@ kusisina-plataforma/
 │   ├── juegos-engine.js
 │   ├── juegos-data.js
 │   └── juegos-minijuegos.js
+├── schema.sql                        # Esquema inicial de la base en Turso
 └── .github/workflows/deploy-pages.yml   # Despliegue automático a GitHub Pages
 ```
 
+## 🗄️ Configurar la base de datos (Turso)
+
+1. Crea una cuenta gratis en [turso.tech](https://turso.tech) y una base de datos:
+   ```bash
+   turso db create kusisina
+   turso db shell kusisina < schema.sql
+   ```
+2. Obtén la URL y un token de acceso:
+   ```bash
+   turso db show kusisina --url
+   turso db tokens create kusisina
+   ```
+3. Completa `js/config.js` con ambos valores:
+   ```js
+   const KUSI_CONFIG = {
+     tursoUrl: "libsql://tu-base.turso.io",
+     tursoToken: "tu-token-aqui"
+   };
+   ```
+
 ## 💻 Cómo ejecutarlo en local
 
-No requiere instalación de dependencias ni build. Basta con servir la carpeta como sitio estático,
-porque el navegador necesita un servidor HTTP (no `file://`) para que `sql.js` (WebAssembly) funcione
-correctamente:
+No requiere instalación de dependencias ni build. Basta con servir la carpeta como sitio estático
+(el navegador necesita un servidor HTTP, no `file://`, para que las peticiones `fetch` funcionen
+correctamente):
 
 ```bash
 # Opción 1: Python (ya viene instalado en la mayoría de sistemas)
@@ -82,7 +110,8 @@ npx serve .
 # Opción 3: extensión "Live Server" de VS Code
 ```
 
-Luego abre `http://localhost:8000` en tu navegador.
+Luego abre `http://localhost:8000` en tu navegador. Necesitas tener `js/config.js` configurado (paso
+anterior) para que el login y el registro funcionen.
 
 ## 🚀 Cómo se despliega (GitHub Pages)
 
@@ -96,9 +125,14 @@ Para activarlo (solo la primera vez):
 
 ## 🔐 Notas sobre datos y seguridad
 
-- No hay servidor ni base de datos central: cada familia se guarda **en el navegador de su propio
-  dispositivo** (`localStorage`), por lo que el progreso no se sincroniza entre dispositivos distintos.
+- Todas las familias comparten una única base de datos central en Turso, así que el progreso **sí se
+  sincroniza** entre dispositivos: una familia puede iniciar sesión con su código y contraseña desde
+  cualquier computadora o celular.
 - Las contraseñas nunca se guardan en texto plano (hash SHA-256 + sal aleatoria vía Web Crypto API).
+- **El token de Turso en `js/config.js` queda visible en el código fuente público del sitio**, porque
+  GitHub Pages es 100% estático y no hay forma de ocultar secretos en el navegador sin un backend o proxy
+  intermedio. Si en algún momento se detecta actividad indebida en la base de datos, se puede revocar el
+  token y generar uno nuevo (`turso db tokens create kusisina`) sin afectar los datos existentes.
 - El panel de facilitador/a usa un PIN de acceso simple, pensado únicamente como barrera básica para
   talleres presenciales — **no es autenticación segura para producción**.
 
