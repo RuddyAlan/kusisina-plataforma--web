@@ -28,11 +28,11 @@
         <form id="formRegistro" novalidate>
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold" data-i18n="registro_familia">Nombre de la familia</label>
+              <label class="form-label fw-semibold" for="fFamilia" data-i18n="registro_familia">Nombre de la familia</label>
               <input type="text" class="form-control" id="fFamilia" placeholder="Ej. Familia Mamani Quispe" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold" data-i18n="registro_ciudad">Municipio</label>
+              <label class="form-label fw-semibold" for="fMunicipio" data-i18n="registro_ciudad">Municipio</label>
               <select class="form-select" id="fMunicipio">
                 <option>La Paz</option>
                 <option>El Alto</option>
@@ -40,21 +40,21 @@
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold" data-i18n="registro_adulto">Tu nombre (persona adulta)</label>
+              <label class="form-label fw-semibold" for="fAdulto" data-i18n="registro_adulto">Tu nombre (persona adulta)</label>
               <input type="text" class="form-control" id="fAdulto" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold" data-i18n="registro_correo">Correo electrónico</label>
+              <label class="form-label fw-semibold" for="fCorreo" data-i18n="registro_correo">Correo electrónico</label>
               <input type="email" class="form-control" id="fCorreo" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold" data-i18n="registro_clave">Contraseña</label>
+              <label class="form-label fw-semibold" for="fClave" data-i18n="registro_clave">Contraseña</label>
               <input type="password" class="form-control" id="fClave" minlength="4" required>
             </div>
           </div>
 
           <hr class="my-4">
-          <label class="form-label fw-semibold d-block" data-i18n="registro_ninos">Perfiles de niñas, niños o adolescentes</label>
+          <div class="form-label fw-semibold d-block" data-i18n="registro_ninos">Perfiles de niñas, niños o adolescentes</div>
           <div id="listaNinos" class="d-flex flex-column gap-2 mb-2"></div>
           <button type="button" id="btnAgregarNino" class="btn btn-kusi-secundario btn-sm">
             <i class="bi bi-plus-circle me-1"></i><span data-i18n="registro_agregarNino">Agregar niña/niño</span>
